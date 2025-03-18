@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "liste.h"
 #include <iostream>
+#include <stdlib.h>
 
 using std::string;
 
@@ -17,8 +18,18 @@ int main()
 {
     std::cout << "Programul începe...\n";
     int oko = 1;
+    char *a = (char*)malloc(11 * sizeof(char));
+    a[0] = 'P';
+    a[1] = 'o';
+    a[2] = 'i';
+    a[3] = 'n';
+    a[4] = 't';
+    a[5] = 's';
+    a[6] = ':';
+    a[7] = ' ';
+    a[10] = '\n';
 
-    int width = 800, height = 600, i = 60, delta = 60;
+    int width = 800, height = 600, i = 60, points = 0;
     InitWindow(width, height, "Raylib Winw");
     SetTargetFPS(60);
     std::cout << "Fereastra a fost inițializată!\n";
@@ -48,12 +59,6 @@ int main()
             std::cout << "YOU LOSE" << std::endl;
         }
 
-        /*if (GetTime() > 5 && delta == 60)
-        {
-            delta = 90;
-            SetTargetFPS(60);
-        }*/
-
         point.x_rect += point.vx;
         point.y_rect += point.vy;
 
@@ -64,12 +69,13 @@ int main()
 
         cap = p1; // point.y_rect = 10
         if (!p1 && !p2)
-            std::cout << "WIN" << std::endl;
-            ok = 0;
+            {std::cout << "WIN" << std::endl;
+            ok = 0;}
         while (cap)
         {
             if (point.y_rect == 10 && point.x_rect >= cap->val1 && point.x_rect <= cap->val1 + 90)
             {
+                points++;
                 capp = p2;
                 while (capp)
                 {
@@ -115,6 +121,7 @@ int main()
         {
             if (point.y_rect == 40 && point.x_rect >= cap->val1 && point.x_rect <= cap->val1 + 90)
             {
+                points++;
                 if (!cap->next1 || !cap->next2)
                 {
                     if (!cap->next1 && !cap->next2)
@@ -143,6 +150,12 @@ int main()
                 cap = nullptr;
         }
 
+        if(points >= 10){
+            a[8] = points / 10 + 48;
+            a[9] = points % 10 + 48;
+        }
+        else{a[8] = ' '; a[9] = points + 48;}
+
         BeginDrawing();
 
         ClearBackground(BLACK);
@@ -164,7 +177,7 @@ int main()
             DrawRectangle(cap->val1, 40, 90, 20, ORANGE);
             cap = cap->next2;
         }
-        
+        DrawText(a, 0, 580, 20, RED);
         EndDrawing();
     }
     CloseWindow();
